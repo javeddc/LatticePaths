@@ -1,0 +1,10 @@
+var _user$project$Repl$t_s_o_l = {ctor: '_Tuple0'};
+var _user$project$Repl$join = F2(
+	function (a, b) {
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			a,
+			A2(_elm_lang$core$Basics_ops['++'], ' ', b));
+	});
+var _user$project$Repl$sayHello = _user$project$Repl$join('Hello');
+var _user$project$Repl$d_e_l_t_r_o_n_3_0_3_0 = _user$project$Repl$sayHello('John');

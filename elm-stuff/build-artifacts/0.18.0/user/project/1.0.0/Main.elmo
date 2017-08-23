@@ -1,0 +1,349 @@
+var _user$project$Main$makeRow = function (b) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		A2(
+			_elm_lang$core$List$map,
+			function (x) {
+				return A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('box'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('box'),
+						_1: {ctor: '[]'}
+					});
+			},
+			A2(_elm_lang$core$List$range, 1, b)));
+};
+var _user$project$Main$generateGrid = F2(
+	function (a, b) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$List$map,
+				function (x) {
+					return A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('row'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _user$project$Main$makeRow(b),
+							_1: {ctor: '[]'}
+						});
+				},
+				A2(_elm_lang$core$List$range, 1, a)));
+	});
+var _user$project$Main$padding = F2(
+	function (i, c) {
+		padding:
+		while (true) {
+			if (_elm_lang$core$Native_Utils.eq(
+				_elm_lang$core$String$length(c),
+				i)) {
+				return c;
+			} else {
+				var _v0 = i,
+					_v1 = A2(
+					_elm_lang$core$Basics_ops['++'],
+					c,
+					A2(_elm_lang$core$String$left, 1, c));
+				i = _v0;
+				c = _v1;
+				continue padding;
+			}
+		}
+	});
+var _user$project$Main$pathfinder = F2(
+	function (x, y) {
+		return {
+			ctor: '::',
+			_0: 'dummy',
+			_1: {
+				ctor: '::',
+				_0: 'string',
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _user$project$Main$pickLesser = F2(
+	function (a, b) {
+		return (_elm_lang$core$Native_Utils.cmp(a, b) > 0) ? b : a;
+	});
+var _user$project$Main$pickGreater = F2(
+	function (a, b) {
+		return (_elm_lang$core$Native_Utils.cmp(a, b) > 0) ? a : b;
+	});
+var _user$project$Main$getFinalPath = F2(
+	function (x, y) {
+		var zerosLength = A2(_user$project$Main$pickLesser, x, y);
+		var onesLength = A2(_user$project$Main$pickGreater, x, y);
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(_user$project$Main$padding, onesLength, '1'),
+			A2(_user$project$Main$padding, zerosLength, '0'));
+	});
+var _user$project$Main$factorial = function (n) {
+	return (_elm_lang$core$Native_Utils.eq(n, 0) || _elm_lang$core$Native_Utils.eq(n, 1)) ? 1 : (n * _user$project$Main$factorial(n - 1));
+};
+var _user$project$Main$numberOfPaths = F2(
+	function (x, y) {
+		return (((_user$project$Main$factorial(x + y) / _user$project$Main$factorial(x)) | 0) / _user$project$Main$factorial(y)) | 0;
+	});
+var _user$project$Main$increase = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 10) < 0) ? (n + 1) : n;
+};
+var _user$project$Main$decrease = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 1) > 0) ? (n - 1) : n;
+};
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'IncreaseX':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						xDim: _user$project$Main$increase(model.xDim),
+						output: _elm_lang$core$Basics$toString(
+							A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim))
+					});
+			case 'DecreaseX':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						xDim: _user$project$Main$decrease(model.xDim),
+						output: _elm_lang$core$Basics$toString(
+							A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim))
+					});
+			case 'IncreaseY':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						yDim: _user$project$Main$increase(model.yDim),
+						output: _elm_lang$core$Basics$toString(
+							A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim))
+					});
+			case 'DecreaseY':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						yDim: _user$project$Main$decrease(model.yDim),
+						output: _elm_lang$core$Basics$toString(
+							A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim))
+					});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						paths: {
+							ctor: '::',
+							_0: A2(_user$project$Main$getFinalPath, model.xDim, model.yDim),
+							_1: model.paths
+						},
+						output: _elm_lang$core$Basics$toString(
+							A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim)),
+						grid: A2(_user$project$Main$generateGrid, model.xDim, model.yDim)
+					});
+		}
+	});
+var _user$project$Main$model = {
+	xDim: 3,
+	yDim: 4,
+	paths: {ctor: '[]'},
+	grid: A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{ctor: '[]'}),
+	output: '35'
+};
+var _user$project$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {xDim: a, yDim: b, paths: c, grid: d, output: e};
+	});
+var _user$project$Main$FindPaths = {ctor: 'FindPaths'};
+var _user$project$Main$DecreaseY = {ctor: 'DecreaseY'};
+var _user$project$Main$IncreaseY = {ctor: 'IncreaseY'};
+var _user$project$Main$DecreaseX = {ctor: 'DecreaseX'};
+var _user$project$Main$IncreaseX = {ctor: 'IncreaseX'};
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Select the dimension of the grid and the number of short paths accross its diagonal will be shown.'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$DecreaseX),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('-'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'x: ',
+											_elm_lang$core$Basics$toString(model.xDim))),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$IncreaseX),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('+'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$DecreaseY),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('-'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												'y: ',
+												_elm_lang$core$Basics$toString(model.yDim))),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$IncreaseY),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('+'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(model.paths)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(model.output),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$FindPaths),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('list paths'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: model.grid,
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$Main$main = _elm_lang$html$Html$beginnerProgram(
+	{view: _user$project$Main$view, model: _user$project$Main$model, update: _user$project$Main$update})();
