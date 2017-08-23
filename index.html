@@ -1,22 +1,6 @@
 <!DOCTYPE HTML>
 <html><head><meta charset="UTF-8"><title>Main</title>
-<style>
-html,head,body { padding:0; margin:0; }
-body { font-family: calibri, helvetica, arial, sans-serif; }
-.row {
-
-}
-.box {
-  display: inline-block;
-  width: 3rem;
-  height: 3rem;
-  border: 1px solid blue;
-  margin: 0.1rem;
-  background-color: lightblue;
-}
-</style>
-
-
+<link rel="stylesheet" href="style.css">
 <script type="text/javascript">
 (function() {
 'use strict';
@@ -8262,11 +8246,7 @@ var _user$project$Main$makeRow = function (b) {
 						_0: _elm_lang$html$Html_Attributes$class('box'),
 						_1: {ctor: '[]'}
 					},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text('[]'),
-						_1: {ctor: '[]'}
-					});
+					{ctor: '[]'});
 			},
 			A2(_elm_lang$core$List$range, 1, b)));
 };
@@ -8347,8 +8327,18 @@ var _user$project$Main$factorial = function (n) {
 };
 var _user$project$Main$numberOfPaths = F2(
 	function (x, y) {
-		return (((_user$project$Main$factorial(x + y) / _user$project$Main$factorial(x)) | 0) / _user$project$Main$factorial(y)) | 0;
+		return _elm_lang$core$Basics$round(
+			(_elm_lang$core$Basics$toFloat(
+				_user$project$Main$factorial(x + y)) / _elm_lang$core$Basics$toFloat(
+				_user$project$Main$factorial(x))) / _elm_lang$core$Basics$toFloat(
+				_user$project$Main$factorial(y)));
 	});
+var _user$project$Main$increase = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 20) < 0) ? (n + 1) : n;
+};
+var _user$project$Main$decrease = function (n) {
+	return (_elm_lang$core$Native_Utils.cmp(n, 1) > 0) ? (n - 1) : n;
+};
 var _user$project$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -8356,44 +8346,60 @@ var _user$project$Main$update = F2(
 			case 'IncreaseX':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{xDim: model.xDim + 1});
+					{
+						xDim: _user$project$Main$increase(model.xDim),
+						grid: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						output: 'Press calculate to find out result!'
+					});
 			case 'DecreaseX':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{xDim: model.xDim - 1});
+					{
+						xDim: _user$project$Main$decrease(model.xDim),
+						grid: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						output: 'Press calculate to find out result!'
+					});
 			case 'IncreaseY':
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{
-						yDim: model.yDim + 1,
-						output: _elm_lang$core$Basics$toString(
-							A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim))
+						yDim: _user$project$Main$increase(model.yDim),
+						grid: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						output: 'Press calculate to find out result!'
 					});
 			case 'DecreaseY':
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{
-						yDim: model.yDim - 1,
-						output: _elm_lang$core$Basics$toString(
-							A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim))
-					});
-			case 'FindPaths':
-				return _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						paths: {
-							ctor: '::',
-							_0: A2(_user$project$Main$getFinalPath, model.xDim, model.yDim),
-							_1: model.paths
-						},
-						output: _elm_lang$core$Basics$toString(
-							A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim))
+						yDim: _user$project$Main$decrease(model.yDim),
+						grid: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						output: 'Press calculate to find out result!'
 					});
 			default:
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{
-						grid: A2(_user$project$Main$generateGrid, model.xDim, model.yDim)
+						grid: A2(_user$project$Main$generateGrid, model.xDim, model.yDim),
+						output: A2(
+							_elm_lang$core$Basics_ops['++'],
+							'There are ',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(
+									A2(_user$project$Main$numberOfPaths, model.xDim, model.yDim)),
+								' paths across this lattice!'))
 					});
 		}
 	});
@@ -8405,14 +8411,13 @@ var _user$project$Main$model = {
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
 		{ctor: '[]'}),
-	output: '35'
+	output: ''
 };
 var _user$project$Main$Model = F5(
 	function (a, b, c, d, e) {
 		return {xDim: a, yDim: b, paths: c, grid: d, output: e};
 	});
-var _user$project$Main$GenerateGrid = {ctor: 'GenerateGrid'};
-var _user$project$Main$FindPaths = {ctor: 'FindPaths'};
+var _user$project$Main$GetResult = {ctor: 'GetResult'};
 var _user$project$Main$DecreaseY = {ctor: 'DecreaseY'};
 var _user$project$Main$IncreaseY = {ctor: 'IncreaseY'};
 var _user$project$Main$DecreaseX = {ctor: 'DecreaseX'};
@@ -8424,152 +8429,58 @@ var _user$project$Main$view = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$div,
+				_elm_lang$html$Html$h1,
 				{ctor: '[]'},
 				{
 					ctor: '::',
+					_0: _elm_lang$html$Html$text('Lattice Paths Solver'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$img,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$src('illustration.gif'),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$button,
+						_elm_lang$html$Html$p,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$DecreaseX),
+							_0: _elm_lang$html$Html_Attributes$class('intro'),
 							_1: {ctor: '[]'}
 						},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html$text('-'),
+							_0: _elm_lang$html$Html$text('Select the dimension of the lattice and hit Calculate to find the number of unique short paths from one corner to the other.'),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_elm_lang$html$Html$div,
-							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(
-									A2(
-										_elm_lang$core$Basics_ops['++'],
-										'x: ',
-										_elm_lang$core$Basics$toString(model.xDim))),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$IncreaseX),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('+'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$button,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$DecreaseY),
+								_0: _elm_lang$html$Html_Attributes$class('control'),
 								_1: {ctor: '[]'}
 							},
 							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('-'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text(
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											'y: ',
-											_elm_lang$core$Basics$toString(model.yDim))),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
 								ctor: '::',
 								_0: A2(
 									_elm_lang$html$Html$button,
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$IncreaseY),
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$IncreaseX),
 										_1: {ctor: '[]'}
 									},
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html$text('+'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(
-								_elm_lang$core$Basics$toString(model.paths)),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text(model.output),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$button,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$FindPaths),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('list paths'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$GenerateGrid),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('generate grid'),
 										_1: {ctor: '[]'}
 									}),
 								_1: {
@@ -8579,10 +8490,126 @@ var _user$project$Main$view = function (model) {
 										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: model.grid,
+											_0: _elm_lang$html$Html$text(
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													'x: ',
+													_elm_lang$core$Basics$toString(model.xDim))),
 											_1: {ctor: '[]'}
 										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$DecreaseX),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('-'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('control'),
 									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$IncreaseY),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('+'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														'y: ',
+														_elm_lang$core$Basics$toString(model.yDim))),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$DecreaseY),
+													_1: {ctor: '[]'}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('-'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$GetResult),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Calculate'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('result'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(model.output),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: model.grid,
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}

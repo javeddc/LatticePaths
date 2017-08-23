@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (..)
-import Html.Attributes exposing (class, style)
+import Html.Attributes exposing (..)
 
 
 main : Program Never Model Msg
@@ -33,7 +33,7 @@ model =
     , yDim = 4
     , paths = []
     , grid = div [] []
-    , output = "35"
+    , output = ""
     }
 
 
@@ -46,7 +46,7 @@ type Msg
     | DecreaseX
     | IncreaseY
     | DecreaseY
-    | FindPaths
+    | GetResult
 
 
 update : Msg -> Model -> Model
@@ -55,32 +55,35 @@ update msg model =
         IncreaseX ->
             { model
                 | xDim = increase model.xDim
-                , output = toString (numberOfPaths model.xDim model.yDim)
+                , grid = div [] []
+                , output = "Press calculate to find out result!"
             }
 
         DecreaseX ->
             { model
                 | xDim = decrease model.xDim
-                , output = toString (numberOfPaths model.xDim model.yDim)
+                , grid = div [] []
+                , output = "Press calculate to find out result!"
             }
 
         IncreaseY ->
             { model
                 | yDim = increase model.yDim
-                , output = toString (numberOfPaths model.xDim model.yDim)
+                , grid = div [] []
+                , output = "Press calculate to find out result!"
             }
 
         DecreaseY ->
             { model
                 | yDim = decrease model.yDim
-                , output = toString (numberOfPaths model.xDim model.yDim)
+                , grid = div [] []
+                , output = "Press calculate to find out result!"
             }
 
-        FindPaths ->
+        GetResult ->
             { model
-                | paths = getFinalPath model.xDim model.yDim :: model.paths
-                , output = toString (numberOfPaths model.xDim model.yDim)
-                , grid = generateGrid model.xDim model.yDim
+                | grid = generateGrid model.xDim model.yDim
+                , output = "There are " ++ toString (numberOfPaths model.xDim model.yDim) ++ " paths accross this lattice!"
             }
 
 
@@ -94,7 +97,7 @@ decrease n =
 
 increase : Int -> Int
 increase n =
-    if n < 10 then
+    if n < 20 then
         n + 1
     else
         n
@@ -110,7 +113,7 @@ factorial n =
 
 numberOfPaths : Int -> Int -> Int
 numberOfPaths x y =
-    factorial (x + y) // factorial x // factorial y
+    round (toFloat (factorial (x + y)) / toFloat (factorial x) / toFloat (factorial y))
 
 
 pickGreater : Int -> Int -> Int
@@ -164,7 +167,7 @@ generateGrid a b =
 makeRow : Int -> Html Msg
 makeRow b =
     List.range 1 b
-        |> List.map (\x -> div [ class "box" ] [ text ("box") ])
+        |> List.map (\x -> div [ class "box" ] [])
         |> div []
 
 
@@ -175,19 +178,20 @@ makeRow b =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text "Select the dimension of the grid and the number of short paths accross its diagonal will be shown." ]
-        , div []
-            [ button [ onClick DecreaseX ] [ text "-" ]
+        [ h1 [] [ text "Lattice Paths Solver" ]
+        , img [ src "illustration.gif" ] []
+        , p [ class "intro" ] [ text "Select the dimension of the lattice and hit Calculate to find the number of unique short paths from one corner to the other." ]
+        , div [ class "control" ]
+            [ button [ onClick IncreaseX ] [ text "+" ]
             , div [] [ text ("x: " ++ (toString model.xDim)) ]
-            , button [ onClick IncreaseX ] [ text "+" ]
+            , button [ onClick DecreaseX ] [ text "-" ]
             ]
-        , div []
-            [ button [ onClick DecreaseY ] [ text "-" ]
+        , div [ class "control" ]
+            [ button [ onClick IncreaseY ] [ text "+" ]
             , div [] [ text ("y: " ++ (toString model.yDim)) ]
-            , button [ onClick IncreaseY ] [ text "+" ]
+            , button [ onClick DecreaseY ] [ text "-" ]
             ]
-        , div [] [ text (toString model.paths) ]
-        , div [] [ text model.output ]
-        , button [ onClick FindPaths ] [ text "list paths" ]
+        , button [ onClick GetResult ] [ text "Calculate" ]
+        , div [ class "result" ] [ text (model.output) ]
         , div [] [ model.grid ]
         ]
